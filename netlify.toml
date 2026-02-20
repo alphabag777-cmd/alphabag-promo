@@ -1,0 +1,26 @@
+# Netlify 배포 설정
+
+[build]
+  command   = "npm run build"
+  publish   = "dist"
+
+# React Router SPA — 모든 경로를 index.html로 처리
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+# 보안 헤더
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "DENY"
+    X-XSS-Protection       = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+
+# JS/CSS 캐시 1년
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
