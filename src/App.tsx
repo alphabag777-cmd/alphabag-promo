@@ -1,28 +1,39 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import Home from "./pages/Home";
-import ProjectDetail from "./pages/ProjectDetail";
+/**
+ * App.tsx
+ *
+ * 라우팅:
+ *   /         → NotFound (planId 없음)
+ *   /:planId  → PromoLanding (planId + ?ref=0x...)
+ *
+ * 사용 예:
+ *   https://my-promo.netlify.app/BBAG-001?ref=0xABCDEF...
+ */
+
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import PromoLanding from "./pages/PromoLanding";
+
+function NotFound() {
+  return (
+    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center text-center px-4">
+      <div>
+        <div className="text-6xl mb-4">🔍</div>
+        <h1 className="text-white text-2xl font-bold mb-2">플랜을 지정해 주세요</h1>
+        <p className="text-slate-400 text-sm">
+          URL 형식: <code className="text-yellow-400">/{"{planId}"}?ref={"{referralAddress}"}</code>
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Navbar />
       <Routes>
-        <Route path="/"               element={<Home />} />
-        <Route path="/project/:planId" element={<ProjectDetail />} />
-        {/* 404 fallback */}
-        <Route path="*" element={
-          <div className="min-h-screen flex items-center justify-center text-slate-400">
-            <div className="text-center">
-              <p className="text-6xl font-extrabold text-white/10 mb-4">404</p>
-              <p className="mb-6">페이지를 찾을 수 없습니다.</p>
-              <a href="/" className="text-amber-400 hover:underline">홈으로 돌아가기</a>
-            </div>
-          </div>
-        } />
+        <Route path="/" element={<NotFound />} />
+        <Route path="/:planId" element={<PromoLanding />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <Footer />
     </BrowserRouter>
   );
 }
